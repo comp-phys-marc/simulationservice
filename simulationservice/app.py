@@ -11,7 +11,7 @@ import json
 
 
 celery = Celery("tasks", backend='rpc://',
-                    broker='amqp://guest:guest@localhost:5672', queue="simulation")
+                    broker='amqp://guest:guest@35.196.180.90:5672', queue="simulation")
 
 @celery.task(name="simulation.tasks.teleportation")
 def teleportation(user_id):
