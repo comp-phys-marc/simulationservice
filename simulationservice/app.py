@@ -25,9 +25,12 @@ def teleportation(user_id):
         print("State to transmit: {0}\n".format(initial_state.get_val()[2]))
         
         first_phase = actualize(state)
+        state.print_density_matrices()
         state.h(qubit=0)
+        state.print_density_matrices()
         second_phase = actualize(state, first_phase)
         state.cx(source=0, target=1).cx(source=2, target=0).h(qubit=2)
+        state.print_density_matrices()
         third_phase = actualize(state, second_phase)
         
         m_1 = state.m(qubit=2)
@@ -39,6 +42,8 @@ def teleportation(user_id):
             state.x(qubit=1)
         if m_1 == one:
             state.z(qubit=1)
+            
+        state.print_density_matrices()
         
         print("State received: {0}\n".format(state.states[0].get_val()[1]))
         

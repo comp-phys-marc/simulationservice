@@ -82,6 +82,10 @@ class Coefficient():
             
     def to_probability(self):
         return self.magnitude**2
+    
+    def complex_conjugate(self):
+        if self.imaginary == True:
+            self.negate_magnitude()
 
     def print(self):
         print(" {0} {1}{2:.3f}".format('-' if self.get_magnitude() < 0 else '+', 'i' if self.get_imaginary() else '', abs(self.get_magnitude())), end='')
@@ -161,6 +165,9 @@ class ComplexCoefficient():
             
     def to_probability(self):
         return self.real_component.get_magnitude()**2 + self.imaginary_component.get_magnitude()**2
+    
+    def complex_conjugate(self):
+        self.imaginary_component.negate_magnitude()
 
     def print(self):
         self.real_component.print()

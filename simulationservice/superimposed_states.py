@@ -3,7 +3,7 @@ from functools import wraps, partial
 import random
 import copy
 from math import sqrt
-from coefficient import Coefficient
+from coefficient import Coefficient, ComplexCoefficient
 
 def normalize_print_and_get_requirements(func):
     @wraps(func)
@@ -207,4 +207,49 @@ class States:
         
     def print_max_requirements(self):
         print("state bits: {0}, flag bits: {1}, signals: {2}\n".format(self.state_bits, self.flag_bits, self.signals))
+    
+    def get_density_matrix(self, qubit):
+            
+        [alpha, beta] = self.get_components(qubit)
+        if isinstance(beta, Coefficient) and isinstance(alpha, Coefficient):
+            
+            entry00 = abs(alpha.get_magnitude())**2
+            entry00 = str(round(entry00, 3))
+            
+            beta_conjugate = copy.deepcopy(beta)
+            beta_conjugate.complex_conjugate()
+    
+            entry01 = alpha.get_magnitude()*beta_conjugate.get_magnitude()
+            if alpha.get_imaginary() == True and beta_conjugate.get_imaginary() == True:
+                entry01 = - entry01
+            elif alpha.get_imaginary() == True or beta_conjugate.get_imaginary() == True:
+                entry01 = str(entry01) + 'i'
+            entry01 = str(round(entry01, 3))
+            
+            alpha_conjugate = copy.deepcopy(alpha)
+            alpha_conjugate.complex_conjugate()
+            
+            entry10 = alpha_conjugate.get_magnitude()*beta.get_magnitude()
+            if alpha_conjugate.get_imaginary() == True and beta.get_imaginary() == True:
+                entry10 = - entry10
+            elif alpha_conjugate.get_imaginary() == True or beta.get_imaginary() == True:
+                entry10 = str(entry10) + 'i'
+            entry10 = str(round(entry10, 3))
+            
+            entry11 = abs(beta.get_magnitude())**2
+            entry11 = str(round(entry11, 3))
+            
+            return [[entry00, entry01],[entry10, entry11]]
+    
+    def print_density_matrices(self):
+        
+        for qubit in range(self.num_qubits):
+            print("qubit {0} density matrix:\n".format(qubit))
+            
+            matrix = self.get_density_matrix(qubit)
+            print(" _         _")
+            print("|{:5s} {:>5s}|\n|{:5s} {:>5s}|\n".format(matrix[0][0], matrix[0][1], matrix[1][0], matrix[1][1]), end='')
+            print(" -         -")     
+        return
+                
         
