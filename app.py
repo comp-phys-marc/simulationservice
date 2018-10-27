@@ -1,17 +1,17 @@
-from coefficient import Coefficient, ComplexCoefficient
-from state import State, one, zero
-from superimposed_states import States
-from actualization import *
-from database import db_session
-from models import User, Calculation, SinglePhase
+from .coefficient import Coefficient, ComplexCoefficient
+from .state import State, one
+from .superimposed_states import States
+from .actualization import *
+from .database import db_session
+from .models import Calculation
 from celery import Celery
 from sqlalchemy import inspect
 from IPython.utils.capture import capture_output
-import json
 
 
 celery = Celery("tasks", backend='rpc://',
                     broker='amqp://guest:guest@localhost:5672', queue="simulation")
+
 
 @celery.task(name="simulation.tasks.teleportation")
 def teleportation(user_id):
@@ -60,12 +60,13 @@ def teleportation(user_id):
     
     return result
 
+
 def add_refresh(obj):
     db_session.add(obj)
     db_session.flush()
     db_session.refresh(obj)
 
+
 def object_as_dict(obj):
     return {c.key: getattr(obj, c.key)
             for c in inspect(obj).mapper.column_attrs}
-    

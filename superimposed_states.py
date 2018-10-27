@@ -1,9 +1,9 @@
-from state import State, one, zero
+from .state import State, one, zero
 from functools import wraps, partial
 import random
 import copy
 from math import sqrt
-from coefficient import Coefficient
+from .coefficient import Coefficient
 
 def normalize_print_and_get_requirements(func):
     @wraps(func)

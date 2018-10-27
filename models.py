@@ -1,6 +1,6 @@
-from sqlalchemy import Column, Integer, String
+from sqlalchemy import Column, Integer, String, ForeignKey
 from sqlalchemy.orm import relationship
-from database import Base
+from .database import Base
 
 class User(Base):
 
@@ -24,6 +24,7 @@ class User(Base):
     def __repr__(self):
         return '<User %r>' % (self.name)
 
+
 class Calculation(Base):
 
     __tablename__ = 'Calculation'
@@ -41,7 +42,8 @@ class Calculation(Base):
 
     def __repr__(self):
         return '<Calculation %r>' % (self.id)
-    
+
+
 class SinglePhase(Base):
 
     __tablename__ = 'Phase'

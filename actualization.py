@@ -1,7 +1,7 @@
-from coefficient import Coefficient, ComplexCoefficient
-from state import State, one, zero
-from superimposed_states import States
+from .coefficient import Coefficient, ComplexCoefficient
+from .models import SinglePhase
 import numpy
+
 
 def actualize(superimposed_state, previous_phase=None):
     
@@ -49,6 +49,9 @@ def actualize(superimposed_state, previous_phase=None):
         previous_phase_id = previous_phase.id
     else:
         previous_phase_id = -1
+
+    print("\nstate register: {0}\nnegative flag register: {1}\nimaginary flag register: {2}\nphase: {3}\n"
+          .format(phi, negative_flag_bits, imaginary_flag_bits, superimposed_state_bits))
         
     return SinglePhase(
         phase=phi,
@@ -57,8 +60,9 @@ def actualize(superimposed_state, previous_phase=None):
         states=superimposed_state_bits,
         previous_phase_id=previous_phase_id
     )
-            
-def encode(a,b,g):
+
+
+def encode(a, b, g):
     radius = a + (a/(2*g))
     dz = numpy.absolute(((2*(a**2+a)-1) + numpy.sqrt(numpy.absolute((2*(a**2+a)-1)**2 - 4*((a**2+a)**2+1/4-(a+a/(2*g))**2))))/2 - ((2*(a**2+a)-1) - numpy.sqrt(numpy.absolute((2*(a**2+a)-1)**2 - 4*((a**2+a)**2+1/4-(a+a/(2*g))**2))))/2)
     dx = numpy.absolute(a - (-1+numpy.sqrt(numpy.absolute(1-4*g*(((2*(a**2+a)-1)) - numpy.sqrt(numpy.absolute((2*(a**2+a)-1)**2 - 4*((a**2+a)**2+1/4-(a+a/(2*g))**2))))/2))/(2*g)))
@@ -66,9 +70,10 @@ def encode(a,b,g):
     phi = numpy.arcsin(c*numpy.sin(numpy.pi - numpy.arcsin(dx/c))/radius)
     theta = numpy.arcsin(b)
     
-    return numpy.array([phi,theta])
+    return numpy.array([phi, theta])
 
-def decode(phi,theta,g):
+
+def decode(phi, theta, g):
     c = numpy.sqrt(2-2*numpy.cos(phi))
     alpha = - numpy.arcsin(numpy.sin(phi)/c)+numpy.pi/2
     beta = numpy.pi - numpy.pi/2 - alpha
@@ -78,4 +83,4 @@ def decode(phi,theta,g):
     x = (dz/dx-1-g*b**2-b)/(2*g)
     a = numpy.ceil(x)
     
-    return numpy.array([a,b])
+    return numpy.array([a, b])

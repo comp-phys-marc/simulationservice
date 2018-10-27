@@ -1,5 +1,6 @@
 import copy
 
+
 class Coefficient():
     
     def __init__(self, magnitude=0.00, imaginary=False):
