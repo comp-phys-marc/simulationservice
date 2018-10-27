@@ -53,7 +53,7 @@ class SinglePhase(Base):
     negative_flags = Column(String(2048))
     states = Column(String(2048))
     previous_phase_id = Column(Integer)
-    phase = Column(Integer)
+    phase = Column(String(2048))
     calculation_id = Column(Integer, ForeignKey('Calculation.id'))
 
     def __init__(self, previous_phase_id, phase, imaginary_flags, negative_flags, states, calculation_id):
