@@ -1,5 +1,5 @@
-from .coefficient import Coefficient, ComplexCoefficient
-from .models import SinglePhase
+from coefficient import Coefficient, ComplexCoefficient
+from models import SinglePhase
 import numpy
 
 

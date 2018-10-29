@@ -1,16 +1,16 @@
-from .coefficient import Coefficient, ComplexCoefficient
-from .state import State, one
-from .superimposed_states import States
-from .actualization import *
-from .database import db_session
-from .models import Calculation
+from coefficient import Coefficient, ComplexCoefficient
+from state import State, one
+from superimposed_states import States
+from actualization import *
+from database import db_session
+from models import Calculation
 from celery import Celery
 from sqlalchemy import inspect
 from IPython.utils.capture import capture_output
 
 
 celery = Celery("tasks", backend='rpc://',
-                    broker='amqp://guest:guest@35.196.180.90:5672', queue="simulation")
+                    broker='amqp://SA:tercesdeqmis@35.237.95.206:5672', queue="simulation")
 
 
 @celery.task(name="simulation.tasks.teleportation")

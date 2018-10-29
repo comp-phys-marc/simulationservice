@@ -1,4 +1,4 @@
-from .coefficient import Coefficient, ComplexCoefficient
+from coefficient import Coefficient, ComplexCoefficient
 import copy
 
 zero = "0"
