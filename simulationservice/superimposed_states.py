@@ -241,7 +241,7 @@ class States:
             entry11 = abs(beta.get_magnitude())**2
             entry11 = str(round(entry11, 3))
             
-            return [[entry00, entry01],[entry10, entry11]]
+            return [[entry00, entry01], [entry10, entry11]]
     
     def print_density_matrices(self):
         

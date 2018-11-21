@@ -1,16 +1,24 @@
 from coefficient import Coefficient, ComplexCoefficient
 from state import State, one
 from superimposed_states import States
-from actualization import *
+from actualization import actualize
 from database import db_session
 from models import Calculation
 from celery import Celery
+from device import QEDAsPennyLaneDevice
 from sqlalchemy import inspect
 from IPython.utils.capture import capture_output
+import pennylane as qml
+from pennylane import numpy as np
 
 
 celery = Celery("tasks", backend='rpc://',
                     broker='amqp://SA:tercesdeqmis@35.237.95.206:5672', queue="simulation")
+
+
+@celery.task(name="simulation.tasks.pennylane_teleportation")
+def initialize(wires):
+    device = QEDAsPennyLaneDevice(wires)
 
 
 @celery.task(name="simulation.tasks.teleportation")
