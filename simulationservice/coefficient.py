@@ -72,7 +72,7 @@ class Coefficient():
         if self.imaginary:
             self.negate_magnitude()
             self.clear_imaginary()
-        if not self.imaginary == True:
+        elif not self.imaginary == True:
             self.set_imaginary()
             
     def multiply_by_number(self, number):
