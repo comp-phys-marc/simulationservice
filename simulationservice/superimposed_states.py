@@ -133,7 +133,7 @@ class States:
                 hadamard_result[1].print()
                 print("\n")
             self.states = new_states
-            return self 
+        return self 
     
     @normalize_print_and_get_requirements
     def m(self, qubit):
