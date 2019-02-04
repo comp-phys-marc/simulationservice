@@ -118,22 +118,36 @@ class States:
         negative_beta = copy.deepcopy(beta)
         negative_beta.negate_magnitude()
         if alpha.equals(beta):
-            self.states = zero_states
-        elif alpha.equals(negative_beta):
-            self.states = one_states
-        else:
-            new_states = []  
+            print("h ({0})".format(qubit), end='')
             for state in self.states:
-                hadamard_result = state.h(qubit)
-                new_states.extend(hadamard_result)
+                state.print()
+            print(" =", end='')
+            self.states = zero_states
+            for state in self.states:
+                state.print()
+            print("\n")
+        elif alpha.equals(negative_beta):
+            print("h ({0})".format(qubit), end='')
+            for state in self.states:
+                state.print()
+            print(" =", end='')
+            self.states = one_states
+            for state in self.states:
+                state.print()
+            print("\n")
+        else:
+            new_states = []
+            for state in self.states:
                 print("h ({0})".format(qubit), end='')
                 state.print()
+                hadamard_result = state.h(qubit)
+                new_states.extend(hadamard_result)
                 print(" =", end='')
                 hadamard_result[0].print()
                 hadamard_result[1].print()
                 print("\n")
             self.states = new_states
-        return self 
+        return self
     
     @normalize_print_and_get_requirements
     def m(self, qubit):
