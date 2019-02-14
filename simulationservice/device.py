@@ -1,6 +1,6 @@
-from coefficient import Coefficient, ComplexCoefficient
-from state import State, one
-from superimposed_states import States
+from qedlib.coefficient import Coefficient, ComplexCoefficient
+from qedlib.state import State, one
+from qedlib.superimposed_states import States
 from actualization import actualize
 from pennylane import Device
 

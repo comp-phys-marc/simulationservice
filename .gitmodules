@@ -1,0 +1,3 @@
+[submodule "simulationservice/qedlib"]
+	path = simulationservice/qedlib
+	url = https://gitlab.com/QuantumEmulator/qedlib.git
