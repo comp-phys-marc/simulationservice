@@ -1,4 +1,4 @@
-from coefficient import Coefficient, ComplexCoefficient
+from qedlib.coefficient import Coefficient, ComplexCoefficient
 from models import SinglePhase
 import numpy
 
