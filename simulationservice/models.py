@@ -1,11 +1,11 @@
 from sqlalchemy import Column, Integer, String, ForeignKey
-from database import Base
+from emulatorcommon.database import Database
 from sqlalchemy.orm import relationship
 
 
-class SinglePhase(Base):
+class SinglePhase(Database.Base):
 
-    __tablename__ = 'Phase'
+    __tablename__ = 'SinglePhase'
 
     id = Column(Integer, primary_key=True, autoincrement=True)
     flags = Column(String(2048))
@@ -23,7 +23,7 @@ class SinglePhase(Base):
         return '<SinglePhase %r>' % (self.id)
 
 
-class Calculation(Base):
+class Calculation(Database.Base):
 
     __tablename__ = 'Calculation'
 
@@ -42,7 +42,7 @@ class Calculation(Base):
         return '<Calculation %r>' % (self.id)
 
 
-class User(Base):
+class User(Database.Base):
 
     __tablename__ = 'User'
 
@@ -50,16 +50,16 @@ class User(Base):
     name = Column(String(255))
     email = Column(String(255), unique=True)
     password = Column(String(255))
-    companyName = Column(String(255))
+    companyname = Column(String(255))
     phone = Column(String(50))
     calculations = relationship("Calculations", primaryjoin=Calculation.user_id == id)
 
-    def __init__(self, name, email, phone, password, companyName):
+    def __init__(self, name, email, phone, password, companyname):
         self.name = name
         self.email = email
         self.phone = phone
         self.password = password
-        self.companyName = companyName
+        self.companyName = companyname
 
     def __repr__(self):
         return '<User %r>' % (self.name)

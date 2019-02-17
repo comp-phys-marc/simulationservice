@@ -1,68 +1,38 @@
-from qedlib.coefficient import Coefficient, ComplexCoefficient
-from qedlib.state import State, one
-from qedlib.superimposed_states import States
-from actualization import actualize
-from database import db_session
-from models import Calculation
-from celery import Celery
 from sqlalchemy import inspect
 from IPython.utils.capture import capture_output
+from settings import Settings
+from models import Calculation
+from emulatorcommon.database import Database
+from emulatorcommon.utilities import Utils
+from emulatorcommon.message_bus import MessageBus
+from qedlib.parser.parser import run_qasm
+
+settings = Settings()
+utils = Utils()
+
+bus = MessageBus(settings)
+conn = bus.connection
+
+database = Database(settings)
+db_session = database.session
 
 
-celery = Celery("tasks", backend='rpc://',
-                    broker='amqp://SA:tercesdeqmis@35.237.95.206:5672', queue="simulation")
-
-
-@celery.task(name="simulation.tasks.teleportation")
-def teleportation(user_id):
-    
-    initial_coeff = Coefficient(magnitude=1.00, imaginary=False)
-    initial_state = State(coeff=initial_coeff, val="000")
-    state = States(state_array=[initial_state], num_qubits=3)
+@conn.task(name="simulation.tasks.execute")
+def execute_qasm(user_id, qasm, name):
 
     with capture_output() as captured:
+
+        result = run_qasm(qasm)
+
+        result.ensemble.print_density_matrices()
+        result.ensemble.print_max_requirements()
         
-        print("State to transmit: {0}\n".format(initial_state.get_val()[2]))
-        
-        first_phase = actualize(state)
-        state.print_density_matrices()
-        state.h(qubit=0)
-        state.print_density_matrices()
-        second_phase = actualize(state, first_phase)
-        state.cx(source=0, target=1).cx(source=2, target=0).h(qubit=2)
-        state.print_density_matrices()
-        third_phase = actualize(state, second_phase)
-        
-        m_1 = state.m(qubit=2)
-        m_2 = state.m(qubit=0)
+    readout = captured.stdout
     
-        print("Alice measures {0}, {1}\n".format(m_1, m_2))
-        
-        if m_2 == one:
-            state.x(qubit=1)
-        if m_1 == one:
-            state.z(qubit=1)
-            
-        state.print_density_matrices()
-        
-        print("State received: {0}\n".format(state.states[0].get_val()[1]))
-        
-        state.print_max_requirements()
-        
-    result = captured.stdout
-    
-    new_teleportation = Calculation(result=result, user_id=user_id, type="teleporation")
-    add_refresh(new_teleportation)
-    
-    first_phase.calculation_id = new_teleportation.id
-    second_phase.calculation_id = new_teleportation.id
-    third_phase.calculation_id = new_teleportation.id
-    
-    db_session.add(first_phase)
-    db_session.add(second_phase)
-    db_session.add(third_phase)
+    new_calculation = Calculation(result=readout, user_id=user_id, type=name)
+    add_refresh(new_calculation)
     db_session.commit()
-    
+
     return result
 
 
