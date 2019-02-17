@@ -52,7 +52,7 @@ class User(Database.Base):
     password = Column(String(255))
     companyname = Column(String(255))
     phone = Column(String(50))
-    calculations = relationship("Calculations", primaryjoin=Calculation.user_id == id)
+    calculations = relationship("Calculation", primaryjoin=Calculation.user_id == id)
 
     def __init__(self, name, email, phone, password, companyname):
         self.name = name
