@@ -27,8 +27,8 @@ def execute_qasm(user_id, qasm, name):
 
             result = run_qasm(qasm)
 
-            result.ensemble.print_density_matrices()
-            result.ensemble.print_max_requirements()
+            result[0].ensemble.print_density_matrices()
+            result[0].ensemble.print_max_requirements()
 
         readout = captured.stdout
 
