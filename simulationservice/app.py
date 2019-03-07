@@ -77,7 +77,7 @@ def create_experiment(user_id, name, type):
 
         return {
             "message": f'Successfully created {name} experiment.',
-            "data": utils.object_as_dict(new_experiment),
+            "experiment": utils.object_as_dict(new_experiment),
             "status": 200
         }
 
