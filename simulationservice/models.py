@@ -30,16 +30,37 @@ class Calculation(Database.Base):
     id = Column(Integer, primary_key=True, autoincrement=True)
     result = Column(String(2048))
     user_id = Column(Integer, ForeignKey('User.id'))
+    experiment_id = Column(Integer, ForeignKey('Experiment.id'))
     type = Column(String(255))
     phases = relationship("SinglePhase", primaryjoin=SinglePhase.calculation_id == id)
 
-    def __init__(self, result, user_id, type):
+    def __init__(self, result, user_id, type, experiment_id):
         self.result = result
+        self.user_id = user_id
+        self.type = type
+        self.experiment_id = experiment_id
+
+    def __repr__(self):
+        return '<Calculation %r>' % (self.id)
+
+
+class Experiment(Database.Base):
+
+    __tablename__ = 'Experiment'
+
+    id = Column(Integer, primary_key=True, autoincrement=True)
+    name = Column(String(255))
+    user_id = Column(Integer, ForeignKey('User.id'))
+    type = Column(String(255))
+    executions = relationship("Calculation", primaryjoin=Calculation.experiment_id == id)
+
+    def __init__(self, name, user_id, type):
+        self.name = name
         self.user_id = user_id
         self.type = type
 
     def __repr__(self):
-        return '<Calculation %r>' % (self.id)
+        return '<Experiment %r>' % (self.id)
 
 
 class User(Database.Base):
@@ -53,6 +74,7 @@ class User(Database.Base):
     companyname = Column(String(255))
     phone = Column(String(50))
     calculations = relationship("Calculation", primaryjoin=Calculation.user_id == id)
+    experiments = relationship("Experiment", primaryjoin=Experiment.user_id == id)
 
     def __init__(self, name, email, phone, password, companyname):
         self.name = name
