@@ -56,7 +56,7 @@ def list_experiments(filter):
     if len(experiments_array) > 0:
         return {
             "message": "Experiments found.",
-            "data": experiments_array,
+            "experiments": experiments_array,
             "status": 200
         }
     else:
@@ -67,10 +67,29 @@ def list_experiments(filter):
 
 
 @conn.task(name="simulation.tasks.create_experiment")
-def create_experiment(user_id, name, type):
+def create_experiment(user_id, name, type, qubits):
 
     try:
-        new_experiment = Experiment(name=name, user_id=user_id, type=type)
+        if type == 'ibmq':
+            simulators = 0
+            emulators = 0
+
+        elif type == 'python' or type == 'rust':
+            simulators = 1
+            emulators = 0
+
+        else:
+            simulators = 0
+            emulators = 0
+
+        new_experiment = Experiment(
+            name=name,
+            user_id=user_id,
+            type=type,
+            qubits=qubits,
+            simulators=simulators,
+            emulators=emulators
+        )
 
         add_refresh(new_experiment)
         db_session.commit()
