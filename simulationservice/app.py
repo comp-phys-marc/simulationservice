@@ -78,6 +78,10 @@ def create_experiment(user_id, name, type, qubits):
             simulators = 1
             emulators = 0
 
+        elif type == 'emulator':
+            simulators = 0
+            emulators = 1
+
         else:
             simulators = 0
             emulators = 0
