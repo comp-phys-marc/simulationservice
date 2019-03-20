@@ -112,6 +112,32 @@ def create_experiment(user_id, name, type, qubits):
         }
 
 
+@conn.task(name="simulation.tasks.update_experiment_code")
+def update_experiment_code(experiment_id, code):
+
+    try:
+
+        experiment = Experiment.query.filter_by(id=experiment_id).first()
+
+        experiment.code = code
+
+        add_refresh(experiment)
+        db_session.commit()
+
+        return {
+            "message": f'Successfully updated {experiment.name} experiment.',
+            "experiment": utils.object_as_dict(experiment),
+            "status": 200
+        }
+
+    except Exception as e:
+        error_message = str(e)
+        return {
+            "message": f'An error occurred: {error_message}',
+            "status": 500
+        }
+
+
 @conn.task(name="simulation.tasks.execute")
 def execute_qasm(user_id, qasm, name, experiment_id):
 
