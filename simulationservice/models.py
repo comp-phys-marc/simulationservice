@@ -57,15 +57,17 @@ class Experiment(Database.Base):
     qubits = Column(Integer)
     simulators = Column(Integer)
     emulators = Column(Integer)
+    device_id = Column(String())
     executions = relationship("Calculation", primaryjoin=Calculation.experiment_id == id)
 
-    def __init__(self, name, user_id, type, qubits, simulators, emulators):
+    def __init__(self, name, user_id, type, qubits, simulators, emulators, device_id=None):
         self.name = name
         self.user_id = user_id
         self.type = type
         self.qubits = qubits
         self.simulators = simulators
         self.emulators = emulators
+        self.device_id = device_id
 
     def __repr__(self):
         return '<Experiment %r>' % (self.id)

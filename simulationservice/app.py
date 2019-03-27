@@ -67,7 +67,7 @@ def list_experiments(filter):
 
 
 @conn.task(name="simulation.tasks.create_experiment")
-def create_experiment(user_id, name, type, qubits):
+def create_experiment(user_id, name, type, qubits, device_id):
 
     try:
         if type == 'ibmq':
@@ -78,7 +78,7 @@ def create_experiment(user_id, name, type, qubits):
             simulators = 1
             emulators = 0
 
-        elif type == 'emulator':
+        elif type == 'emulator' or type == 'tensor':
             simulators = 0
             emulators = 1
 
@@ -86,14 +86,26 @@ def create_experiment(user_id, name, type, qubits):
             simulators = 0
             emulators = 0
 
-        new_experiment = Experiment(
-            name=name,
-            user_id=user_id,
-            type=type,
-            qubits=qubits,
-            simulators=simulators,
-            emulators=emulators
-        )
+        if device_id:
+            new_experiment = Experiment(
+                name=name,
+                user_id=user_id,
+                type=type,
+                qubits=qubits,
+                simulators=simulators,
+                emulators=emulators,
+                device_id=device_id
+            )
+
+        else:
+            new_experiment = Experiment(
+                name=name,
+                user_id=user_id,
+                type=type,
+                qubits=qubits,
+                simulators=simulators,
+                emulators=emulators
+            )
 
         add_refresh(new_experiment)
         db_session.commit()
