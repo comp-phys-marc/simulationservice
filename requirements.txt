@@ -17,4 +17,4 @@ decorator==4.3.0
 psycopg2==2.7.5
 numpy==1.15.3
 python-dotenv==0.10.1
-tensorflow==1.13.0
+tensorflow==1.13.1
