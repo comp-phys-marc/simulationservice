@@ -151,15 +151,15 @@ def update_experiment_code(experiment_id, code):
 
 
 @conn.task(name="simulation.tasks.execute")
-def execute_qasm(user_id, qasm, name, experiment_id):
+def execute_qasm(user_id, qasm, name, experiment_id, execution_type='dirac'):
 
     try:
 
         with capture_output() as captured:
 
-            result = run_qasm(qasm)
+            result = run_qasm(qasm, execution_type)
 
-            result[0].ensemble.print_density_matrices()
+            result[0].ensemble.print()
             result[0].ensemble.print_max_requirements()
 
         readout = captured.stdout
