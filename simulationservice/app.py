@@ -151,7 +151,7 @@ def update_experiment_code(experiment_id, code):
 
 
 @conn.task(name="simulation.tasks.execute")
-def execute_qasm(user_id, qasm, name, experiment_id, execution_type='dirac'):
+def execute_qasm(user_id, qasm, name, experiment_id, execution_type):
 
     try:
 

@@ -18,3 +18,4 @@ psycopg2==2.7.5
 numpy==1.15.3
 python-dotenv==0.10.1
 tensorflow==1.13.1
+IBMQuantumExperience==2.0.4
