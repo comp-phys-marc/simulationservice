@@ -1,6 +1,6 @@
 [submodule "simulationservice/qedlib"]
 	path = simulationservice/qedlib
-	url = https://github.com/comp-phys-marc/qeelib
+	url = https://github.com/comp-phys-marc/qeelib.git
 [submodule "simulationservice/emulatorcommon"]
 	path = simulationservice/emulatorcommon
-	url = https://github.com/comp-phys-marc/emulatorcommon
+	url = https://github.com/comp-phys-marc/emulatorcommon.git
